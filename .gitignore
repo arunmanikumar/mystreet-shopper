@@ -1,0 +1,23 @@
+# .NET artifacts
+bin/
+obj/
+*.db
+
+# Node.js artifacts
+node_modules/
+dist/
+/frontend/node_modules/
+/frontend/dist/
+
+# Visual Studio files
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
