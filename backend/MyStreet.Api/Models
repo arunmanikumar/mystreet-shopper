@@ -1,0 +1,5 @@
+namespace MyStreet.Shoppers.Api.Api.Models;
+
+public sealed record CheckoutRequestDto(IEnumerable<CheckoutItemDto> Items);
+
+public sealed record CheckoutItemDto(int SneakerId, int Quantity);

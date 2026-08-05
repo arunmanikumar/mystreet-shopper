@@ -1,0 +1,8 @@
+using MyStreet.Shoppers.Api.Domain.Entities;
+
+namespace MyStreet.Shoppers.Api.Application.Contracts;
+
+public interface IOrderProcessor
+{
+    Task<Order> ProcessOrderAsync(IEnumerable<CheckoutItem> items, CancellationToken cancellationToken = default);
+}

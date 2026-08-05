@@ -1,0 +1,10 @@
+using MyStreet.Shoppers.Api.Api.Models;
+using MyStreet.Shoppers.Api.Domain.Entities;
+
+namespace MyStreet.Shoppers.Api.Api.Mapping;
+
+public static class CheckoutMappingExtensions
+{
+    public static CheckoutItem ToDomain(this CheckoutItemDto item)
+        => new(item.SneakerId, item.Quantity);
+}

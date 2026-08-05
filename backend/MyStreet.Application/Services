@@ -1,0 +1,36 @@
+using MyStreet.Shoppers.Api.Application.Contracts;
+using MyStreet.Shoppers.Api.Domain.Entities;
+
+namespace MyStreet.Shoppers.Api.Application.Services;
+
+public sealed class OrderProcessor : IOrderProcessor
+{
+    private readonly ISneakerRepository _sneakerRepository;
+
+    public OrderProcessor(ISneakerRepository sneakerRepository)
+    {
+        _sneakerRepository = sneakerRepository;
+    }
+
+    public async Task<Order> ProcessOrderAsync(IEnumerable<CheckoutItem> items, CancellationToken cancellationToken = default)
+    {
+        var validItems = items.Where(item => item.Quantity > 0).ToList();
+        if (!validItems.Any())
+        {
+            throw new ArgumentException("No valid items were provided.", nameof(items));
+        }
+
+        var sneakerIds = validItems.Select(item => item.SneakerId).Distinct();
+        var sneakers = (await _sneakerRepository.GetByIdsAsync(sneakerIds, cancellationToken)).ToList();
+
+        if (sneakers.Count != sneakerIds.Count())
+        {
+            throw new InvalidOperationException("One or more cart items are invalid.");
+        }
+
+        var total = validItems.Sum(item => sneakers.First(s => s.Id == item.SneakerId).Price * item.Quantity);
+        var orderId = Guid.NewGuid().ToString("N");
+
+        return new Order(orderId, total, "Order received.");
+    }
+}

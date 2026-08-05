@@ -1,0 +1,28 @@
+using MyStreet.Shoppers.Api.Application.Contracts;
+using MyStreet.Shoppers.Api.Domain.Entities;
+
+namespace MyStreet.Shoppers.Api.Infrastructure.Repositories;
+
+public sealed class InMemorySneakerRepository : ISneakerRepository
+{
+    private static readonly List<Sneaker> Sneakers = new()
+    {
+        new Sneaker(1, "Street Runner", "Performance sneaker with mesh upper and responsive cushioning.", 129.99M, "Men", string.Empty),
+        new Sneaker(2, "Court Classic", "Retro court silhouette with leather construction and durable grip.", 139.99M, "Unisex", string.Empty),
+        new Sneaker(3, "Trail Blaze", "All-terrain sneaker with reinforced sole and premium traction.", 149.99M, "Outdoor", string.Empty),
+        new Sneaker(4, "Velocity Mid", "Lightweight mid-top sneaker built for everyday comfort.", 119.99M, "Lifestyle", string.Empty),
+        new Sneaker(5, "Urban Flex", "Low-profile sneaker with knit upper and modern city style.", 99.99M, "Lifestyle", string.Empty),
+    };
+
+    public Task<IEnumerable<Sneaker>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult<IEnumerable<Sneaker>>(Sneakers);
+    }
+
+    public Task<IEnumerable<Sneaker>> GetByIdsAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default)
+    {
+        var requestedIds = ids.ToHashSet();
+        var result = Sneakers.Where(sneaker => requestedIds.Contains(sneaker.Id));
+        return Task.FromResult<IEnumerable<Sneaker>>(result);
+    }
+}
