@@ -21,7 +21,7 @@ dotnet build
 ### Frontend
 
 ```powershell
-cd mystreet-shoppers\frontend
+cd mystreet-shoppers\frontend\mystreet-ui
 npm install
 npm run build
 ```
@@ -34,7 +34,7 @@ dotnet run
 ```
 
 ```powershell
-cd mystreet-shoppers\frontend
+cd mystreet-shoppers\frontend\mystreet-ui
 npm install
 npm run dev
 ```

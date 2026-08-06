@@ -2,22 +2,90 @@
 bin/
 obj/
 *.db
+*.log
+*.vspscc
+*.vssscc
 
-# Node.js artifacts
+# ASP.NET Core
+appsettings.Local.json
+
+# Node.js / frontend
 node_modules/
 dist/
-/frontend/node_modules/
-/frontend/dist/
+/build/
+/npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Visual Studio files
-.vscode/
+# React / Vite
+/.vite
+/.cache
+
+# Visual Studio
+.vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+*.ncb
+*.vcxproj.user
+*.VC.db
+*.VC.opendb
 
-# Logs
+# Visual Studio Code
+.vscode/
+.history/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# PostgreSQL local development
+*.backup
+*.dump
+*.sql
+pgdata/
+pgdata-*
+/postgres-data/
+postgres-data/
+*.psqlrc
+*.pgsql_history
+
+# Test results / coverage
+TestResults/
+coverage/
+coverage.*
+*.coverage
+*.coveragexml
+*.log
+*.trx
+
+# Generated logs
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
+
+# IDE and editor folders
+.idea/
+*.iml
+
+# Ignore local environment files
+.env
+
+# Ignore build outputs
+dist/
+build/
+node_modules/
+
+# Ignore package lock files if desired
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

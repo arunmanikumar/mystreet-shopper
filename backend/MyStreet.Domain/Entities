@@ -1,3 +1,0 @@
-namespace MyStreet.Shoppers.Api.Domain.Entities;
-
-public sealed record CheckoutItem(int SneakerId, int Quantity);
