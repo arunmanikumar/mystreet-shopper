@@ -13,6 +13,9 @@ import { CheckoutPage } from '../pages/CheckoutPage'
 import { MyOrdersPage } from '../pages/MyOrdersPage'
 import { OrderDetailsPage } from '../pages/OrderDetailsPage'
 import { PlaceholderPage } from '../pages/PlaceholderPage'
+import { AdminProductsPage } from '../pages/AdminProductsPage'
+import { AdminProductCreatePage } from '../pages/AdminProductCreatePage'
+import { AdminProductEditPage } from '../pages/AdminProductEditPage'
 
 export const appRouter = createBrowserRouter([
   {
@@ -96,12 +99,15 @@ export const appRouter = createBrowserRouter([
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Admin Products"
-                description="Product management tools will be added here for administrative users."
-              />
-            ),
+            element: <AdminProductsPage />,
+          },
+          {
+            path: 'new',
+            element: <AdminProductCreatePage />,
+          },
+          {
+            path: ':id/edit',
+            element: <AdminProductEditPage />,
           },
         ],
       },
