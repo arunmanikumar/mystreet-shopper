@@ -5,6 +5,7 @@ import { createOrder } from '../services/orderService'
 import type { CartLineItem } from '../types/cart'
 import type { OrderPaymentMethod } from '../types/order'
 import { clearStoredCart, getStoredCart } from '../utils/cartStorage'
+import { validateCheckoutSubmission } from './checkoutValidation'
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat('en-US', {
@@ -39,14 +40,25 @@ export function CheckoutPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setApiError(null)
 
     if (cart.length === 0) {
       navigate('/cart', { replace: true })
       return
     }
 
+    const validationError = validateCheckoutSubmission({
+      shippingAddress,
+      paymentMethod,
+      items: cart,
+    })
+
+    if (validationError) {
+      setApiError(validationError)
+      return
+    }
+
     setIsSubmitting(true)
-    setApiError(null)
 
     try {
       const order = await createOrder({
