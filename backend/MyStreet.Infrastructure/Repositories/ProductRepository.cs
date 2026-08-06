@@ -76,7 +76,17 @@ public class ProductRepository : IProductRepository
             return false;
         }
 
-        _context.Products.Update(product);
+        var tracked = _context.Products.Local.FirstOrDefault(p => p.Id == product.Id);
+
+        if (tracked is not null)
+        {
+            _context.Entry(tracked).CurrentValues.SetValues(product);
+        }
+        else
+        {
+            _context.Products.Update(product);
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }

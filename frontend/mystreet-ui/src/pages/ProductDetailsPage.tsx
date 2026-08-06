@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getProductById } from '../services/productService'
 import { ApiServiceError } from '../types/errors'
 import type { Product } from '../types/product'
+import { addProductToCart } from '../utils/cartStorage'
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat('en-US', {
@@ -96,12 +97,8 @@ export function ProductDetailsPage() {
       return
     }
 
-    void navigate('/cart', {
-      state: {
-        productId: product.id,
-        size: selectedSize,
-      },
-    })
+    addProductToCart(product, selectedSize)
+    void navigate('/cart')
   }
 
   return (

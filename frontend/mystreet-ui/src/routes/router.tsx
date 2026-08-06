@@ -1,14 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { AppLayout } from '../layouts/AppLayout'
 import { AdminRoute } from './AdminRoute'
+import { CartPage } from '../pages/CartPage'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/LoginPage'
 import { ProductDetailsPage } from '../pages/ProductDetailsPage'
 import { ProductsPage } from '../pages/ProductsPage'
-import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RegisterPage } from '../pages/RegisterPage'
 import { UnauthorizedPage } from '../pages/UnauthorizedPage'
+import { CheckoutPage } from '../pages/CheckoutPage'
+import { MyOrdersPage } from '../pages/MyOrdersPage'
+import { OrderDetailsPage } from '../pages/OrderDetailsPage'
+import { PlaceholderPage } from '../pages/PlaceholderPage'
 
 export const appRouter = createBrowserRouter([
   {
@@ -39,21 +43,17 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: 'cart',
-        element: (
-          <PlaceholderPage
-            title="Cart"
-            description="Cart management will live here once product selection and quantity state are wired in."
-          />
-        ),
+        element: <CartPage />,
       },
       {
         path: 'checkout',
-        element: (
-          <PlaceholderPage
-            title="Checkout"
-            description="Checkout forms and order submission will be added here in a later pass."
-          />
-        ),
+        element: <ProtectedRoute />,
+        children: [
+          {
+            index: true,
+            element: <CheckoutPage />,
+          },
+        ],
       },
       {
         path: 'orders',
@@ -61,12 +61,7 @@ export const appRouter = createBrowserRouter([
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Orders"
-                description="Order history and tracking screens will be added here once order APIs are available."
-              />
-            ),
+            element: <MyOrdersPage />,
           },
         ],
       },
@@ -76,12 +71,7 @@ export const appRouter = createBrowserRouter([
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Order Details"
-                description="This route will render the details for a single order when that feature is implemented."
-              />
-            ),
+            element: <OrderDetailsPage />,
           },
         ],
       },
