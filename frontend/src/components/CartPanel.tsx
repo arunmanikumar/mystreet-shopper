@@ -5,7 +5,7 @@ interface CartPanelProps {
   total: number;
   isSubmitting: boolean;
   message: string;
-  onUpdateQuantity: (sneakerId: number, quantity: number) => void;
+  onUpdateQuantity: (sneakerId: string, quantity: number) => void;
   onCheckout: () => void;
 }
 

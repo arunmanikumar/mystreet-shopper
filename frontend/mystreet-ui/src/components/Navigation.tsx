@@ -14,7 +14,7 @@ export function Navigation() {
   const links = [
     ...baseLinks,
     ...(isAuthenticated ? [{ to: '/orders', label: 'Orders' }] : []),
-    ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []),
+    ...(isAdmin ? [{ to: '/admin/products', label: 'Admin' }] : []),
     ...(!isAuthenticated ? [
       { to: '/login', label: 'Login' },
       { to: '/register', label: 'Register' },

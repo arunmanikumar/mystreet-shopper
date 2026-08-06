@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import type { Product } from '../types/product'
 
+const placeholderImage =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"%3E%3Crect width="640" height="480" fill="%23e7e5e4"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%2357554e" font-family="Segoe UI, sans-serif" font-size="28"%3EImage not available%3C/text%3E%3C/svg%3E'
+
 type ProductCardProps = {
   product: Product
 }
@@ -46,6 +49,9 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={`${product.brand} ${product.name}`}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
             loading="lazy"
+            onError={(event) => {
+              event.currentTarget.src = placeholderImage
+            }}
           />
         </div>
       </Link>

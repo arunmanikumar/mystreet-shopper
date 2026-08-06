@@ -5,6 +5,9 @@ import { ApiServiceError } from '../types/errors'
 import type { Product } from '../types/product'
 import { addProductToCart } from '../utils/cartStorage'
 
+const placeholderImage =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"%3E%3Crect width="640" height="640" fill="%23e7e5e4"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%2357554e" font-family="Segoe UI, sans-serif" font-size="28"%3EImage not available%3C/text%3E%3C/svg%3E'
+
 function formatPrice(price: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -156,6 +159,9 @@ export function ProductDetailsPage() {
               src={product.imageUrl}
               alt={`${product.brand} ${product.name}`}
               className="aspect-square w-full object-cover"
+              onError={(event) => {
+                event.currentTarget.src = placeholderImage
+              }}
             />
           </div>
 

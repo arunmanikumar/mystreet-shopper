@@ -4,6 +4,9 @@ import { deleteProduct, getProducts } from '../services/productService'
 import { ApiServiceError } from '../types/errors'
 import type { Product } from '../types/product'
 
+const placeholderImage =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Crect width="200" height="200" fill="%23e7e5e4"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%2357554e" font-family="Segoe UI, sans-serif" font-size="14"%3EImage unavailable%3C/text%3E%3C/svg%3E'
+
 function formatPrice(value: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -148,6 +151,9 @@ export function AdminProductsPage() {
                         src={product.imageUrl}
                         alt={`${product.brand} ${product.name}`}
                         className="h-14 w-14 rounded-xl border border-stone-200 object-cover"
+                        onError={(event) => {
+                          event.currentTarget.src = placeholderImage
+                        }}
                       />
                     </td>
                     <td className="px-4 py-3 align-top font-medium text-stone-900">{product.name}</td>
