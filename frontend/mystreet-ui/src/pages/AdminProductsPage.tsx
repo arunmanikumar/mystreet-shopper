@@ -70,7 +70,7 @@ export function AdminProductsPage() {
   }, [])
 
   const handleDelete = async (product: Product) => {
-    const confirmed = window.confirm(`Delete product \"${product.name}\"? This cannot be undone.`)
+    const confirmed = window.confirm(`Delete product "${product.name}"? This cannot be undone.`)
 
     if (!confirmed) {
       return

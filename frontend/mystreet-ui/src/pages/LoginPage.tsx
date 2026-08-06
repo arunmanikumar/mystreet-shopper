@@ -115,7 +115,7 @@ export function LoginPage() {
           </label>
 
           {apiError ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+            <div role="alert" aria-live="assertive" className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
               {apiError}
             </div>
           ) : null}

@@ -65,8 +65,12 @@ public sealed class OrderService : IOrderService
                     throw new AppException("INSUFFICIENT_STOCK", $"Not enough stock for product '{product.Name}' in size '{item.Size}'.", 400);
                 }
 
-                product.StockQty -= item.Quantity;
-                await _productRepository.UpdateAsync(product, cancellationToken);
+                var stockReserved = await TryReserveStockAsync(product, item.Quantity, cancellationToken);
+
+                if (!stockReserved)
+                {
+                    throw new AppException("INSUFFICIENT_STOCK", $"Not enough stock for product '{product.Name}' in size '{item.Size}'.", 400);
+                }
 
                 var lineTotal = product.Price * item.Quantity;
                 totalAmount += lineTotal;
@@ -205,6 +209,27 @@ public sealed class OrderService : IOrderService
         return sizesCsv
             .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .Where(item => !string.IsNullOrWhiteSpace(item));
+    }
+
+    private async Task<bool> TryReserveStockAsync(Product product, int quantity, CancellationToken cancellationToken)
+    {
+        if (_context.Database.IsRelational())
+        {
+            var affectedRows = await _context.Products
+                .Where(item => item.Id == product.Id && item.StockQty >= quantity)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(item => item.StockQty, item => item.StockQty - quantity), cancellationToken);
+
+            return affectedRows == 1;
+        }
+
+        if (product.StockQty < quantity)
+        {
+            return false;
+        }
+
+        product.StockQty -= quantity;
+        return await _productRepository.UpdateAsync(product, cancellationToken);
     }
 
     private sealed record NormalizedOrderItem(Guid ProductId, string Size, int Quantity);

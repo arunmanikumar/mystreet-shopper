@@ -9,6 +9,8 @@ import { login as loginRequest, logout as logoutRequest, register as registerReq
 import type { AuthResponse, AuthUser, LoginRequest, RegisterRequest } from '../types/auth'
 import {
   clearStoredAuth,
+  AUTH_TOKEN_STORAGE_KEY,
+  AUTH_USER_STORAGE_KEY,
   getStoredToken,
   getStoredUser,
   registerUnauthorizedHandler,
@@ -32,12 +34,36 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<AuthUser | null>(() => getStoredUser())
 
   useEffect(() => {
+    if (token && !user) {
+      clearStoredAuth()
+      setToken(null)
+    }
+  }, [token, user])
+
+  useEffect(() => {
     const unregister = registerUnauthorizedHandler(() => {
       setToken(null)
       setUser(null)
     })
 
     return unregister
+  }, [])
+
+  useEffect(() => {
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== AUTH_TOKEN_STORAGE_KEY && event.key !== AUTH_USER_STORAGE_KEY) {
+        return
+      }
+
+      setToken(getStoredToken())
+      setUser(getStoredUser())
+    }
+
+    window.addEventListener('storage', handleStorage)
+
+    return () => {
+      window.removeEventListener('storage', handleStorage)
+    }
   }, [])
 
   const applyAuth = (response: AuthResponse) => {

@@ -35,7 +35,12 @@ export type CartAction = AddAction | SetQuantityAction | RemoveAction | ClearAct
 function normalizeQuantity(quantity: number, stockQty: number) {
   const safeQuantity = Number.isFinite(quantity) ? Math.floor(quantity) : 1
   const minQuantity = Math.max(safeQuantity, 1)
-  return Math.min(minQuantity, stockQty)
+
+  if (stockQty > 0) {
+    return Math.min(minQuantity, stockQty)
+  }
+
+  return minQuantity
 }
 
 export function cartReducer(state: CartLineItem[], action: CartAction): CartLineItem[] {

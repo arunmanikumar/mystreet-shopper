@@ -134,6 +134,16 @@ export function CheckoutPage() {
                 <input
                   type="radio"
                   name="paymentMethod"
+                  value="UPI"
+                  checked={paymentMethod === 'UPI'}
+                  onChange={() => setPaymentMethod('UPI')}
+                />
+                <span className="text-sm text-stone-700">UPI</span>
+              </label>
+              <label className="flex items-center gap-3 rounded-2xl border border-stone-200 px-4 py-3">
+                <input
+                  type="radio"
+                  name="paymentMethod"
                   value="Zelle"
                   checked={paymentMethod === 'Zelle'}
                   onChange={() => setPaymentMethod('Zelle')}
@@ -143,7 +153,7 @@ export function CheckoutPage() {
             </fieldset>
 
             {apiError ? (
-              <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+              <div role="alert" aria-live="assertive" className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
                 {apiError}
               </div>
             ) : null}

@@ -16,6 +16,7 @@ import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { AdminProductsPage } from '../pages/AdminProductsPage'
 import { AdminProductCreatePage } from '../pages/AdminProductCreatePage'
 import { AdminProductEditPage } from '../pages/AdminProductEditPage'
+import { NotFoundPage } from '../pages/NotFoundPage'
 
 export const appRouter = createBrowserRouter([
   {
@@ -114,6 +115,10 @@ export const appRouter = createBrowserRouter([
       {
         path: 'unauthorized',
         element: <UnauthorizedPage />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
       },
     ],
   },

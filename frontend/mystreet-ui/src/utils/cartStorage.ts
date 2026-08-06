@@ -7,12 +7,44 @@ function canUseStorage() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
 }
 
-function readStoredCart(): CartLineItem[] {
+function safeGetItem(key: string) {
   if (!canUseStorage()) {
-    return []
+    return null
   }
 
-  const value = window.localStorage.getItem(CART_STORAGE_KEY)
+  try {
+    return window.localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+function safeSetItem(key: string, value: string) {
+  if (!canUseStorage()) {
+    return
+  }
+
+  try {
+    window.localStorage.setItem(key, value)
+  } catch {
+    // Ignore storage write failures (privacy mode, quota, or restricted environments).
+  }
+}
+
+function safeRemoveItem(key: string) {
+  if (!canUseStorage()) {
+    return
+  }
+
+  try {
+    window.localStorage.removeItem(key)
+  } catch {
+    // Ignore storage remove failures.
+  }
+}
+
+function readStoredCart(): CartLineItem[] {
+  const value = safeGetItem(CART_STORAGE_KEY)
 
   if (!value) {
     return []
@@ -22,10 +54,11 @@ function readStoredCart(): CartLineItem[] {
     const parsed = JSON.parse(value) as CartLineItem[]
 
     if (!Array.isArray(parsed)) {
+      safeRemoveItem(CART_STORAGE_KEY)
       return []
     }
 
-    return parsed.filter((item) => {
+    const sanitized = parsed.filter((item) => {
       return Boolean(
         item &&
           item.product &&
@@ -38,17 +71,20 @@ function readStoredCart(): CartLineItem[] {
           item.quantity > 0,
       )
     })
+
+    if (sanitized.length !== parsed.length) {
+      safeSetItem(CART_STORAGE_KEY, JSON.stringify(sanitized))
+    }
+
+    return sanitized
   } catch {
+    safeRemoveItem(CART_STORAGE_KEY)
     return []
   }
 }
 
 function writeStoredCart(cart: CartLineItem[]) {
-  if (!canUseStorage()) {
-    return
-  }
-
-  window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
+  safeSetItem(CART_STORAGE_KEY, JSON.stringify(cart))
 }
 
 function normalizeQuantity(quantity: number, stockQty: number) {
@@ -74,11 +110,7 @@ export function setStoredCart(cart: CartLineItem[]) {
 }
 
 export function clearStoredCart() {
-  if (!canUseStorage()) {
-    return
-  }
-
-  window.localStorage.removeItem(CART_STORAGE_KEY)
+  safeRemoveItem(CART_STORAGE_KEY)
 }
 
 export function addProductToCart(product: Product, size: string) {

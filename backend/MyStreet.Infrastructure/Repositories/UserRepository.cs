@@ -28,8 +28,7 @@ public class UserRepository : IUserRepository
 
     public Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
-        _context.Users.Add(user);
-        return Task.CompletedTask;
+        return _context.Users.AddAsync(user, cancellationToken).AsTask();
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken = default)

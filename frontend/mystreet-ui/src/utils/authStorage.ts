@@ -9,20 +9,48 @@ function canUseStorage() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
 }
 
-export function getStoredToken() {
+function safeGetItem(key: string) {
   if (!canUseStorage()) {
     return null
   }
 
-  return window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)
+  try {
+    return window.localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+function safeSetItem(key: string, value: string) {
+  if (!canUseStorage()) {
+    return
+  }
+
+  try {
+    window.localStorage.setItem(key, value)
+  } catch {
+    // Ignore storage write failures (privacy mode, quota, or restricted environments).
+  }
+}
+
+function safeRemoveItem(key: string) {
+  if (!canUseStorage()) {
+    return
+  }
+
+  try {
+    window.localStorage.removeItem(key)
+  } catch {
+    // Ignore storage remove failures.
+  }
+}
+
+export function getStoredToken() {
+  return safeGetItem(AUTH_TOKEN_STORAGE_KEY)
 }
 
 export function getStoredUser(): AuthUser | null {
-  if (!canUseStorage()) {
-    return null
-  }
-
-  const value = window.localStorage.getItem(AUTH_USER_STORAGE_KEY)
+  const value = safeGetItem(AUTH_USER_STORAGE_KEY)
 
   if (!value) {
     return null
@@ -37,21 +65,13 @@ export function getStoredUser(): AuthUser | null {
 }
 
 export function storeAuth(token: string, user: AuthUser) {
-  if (!canUseStorage()) {
-    return
-  }
-
-  window.localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token)
-  window.localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user))
+  safeSetItem(AUTH_TOKEN_STORAGE_KEY, token)
+  safeSetItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user))
 }
 
 export function clearStoredAuth() {
-  if (!canUseStorage()) {
-    return
-  }
-
-  window.localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY)
-  window.localStorage.removeItem(AUTH_USER_STORAGE_KEY)
+  safeRemoveItem(AUTH_TOKEN_STORAGE_KEY)
+  safeRemoveItem(AUTH_USER_STORAGE_KEY)
 }
 
 export function notifyUnauthorized() {
