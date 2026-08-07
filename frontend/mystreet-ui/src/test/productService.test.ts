@@ -6,7 +6,7 @@ import {
   getProductById,
   getProducts,
   updateProduct,
-} from './productService'
+} from '../services/productService'
 
 vi.mock('../api/client', () => {
   return {
