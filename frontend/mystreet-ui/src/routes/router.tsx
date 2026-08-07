@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { AppLayout } from '../layouts/AppLayout'
 import { AdminRoute } from './AdminRoute'
+import { CustomerRoute } from './CustomerRoute'
 import { CartPage } from '../pages/CartPage'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/LoginPage'
@@ -24,10 +25,15 @@ export const appRouter = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        index: true,
         element: (
-          <HomePage />
+          <CustomerRoute />
         ),
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+        ],
       },
       {
         path: 'login',
@@ -39,43 +45,76 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: 'products',
-        element: <ProductsPage />,
-      },
-      {
-        path: 'products/:id',
-        element: <ProductDetailsPage />,
-      },
-      {
-        path: 'cart',
-        element: <CartPage />,
-      },
-      {
-        path: 'checkout',
-        element: <ProtectedRoute />,
+        element: <CustomerRoute />,
         children: [
           {
             index: true,
-            element: <CheckoutPage />,
+            element: <ProductsPage />,
+          },
+        ],
+      },
+      {
+        path: 'products/:id',
+        element: <CustomerRoute />,
+        children: [
+          {
+            index: true,
+            element: <ProductDetailsPage />,
+          },
+        ],
+      },
+      {
+        path: 'cart',
+        element: <CustomerRoute />,
+        children: [
+          {
+            index: true,
+            element: <CartPage />,
+          },
+        ],
+      },
+      {
+        path: 'checkout',
+        element: <CustomerRoute />,
+        children: [
+          {
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <CheckoutPage />,
+              },
+            ],
           },
         ],
       },
       {
         path: 'orders',
-        element: <ProtectedRoute />,
+        element: <CustomerRoute />,
         children: [
           {
-            index: true,
-            element: <MyOrdersPage />,
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <MyOrdersPage />,
+              },
+            ],
           },
         ],
       },
       {
         path: 'orders/:id',
-        element: <ProtectedRoute />,
+        element: <CustomerRoute />,
         children: [
           {
-            index: true,
-            element: <OrderDetailsPage />,
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <OrderDetailsPage />,
+              },
+            ],
           },
         ],
       },

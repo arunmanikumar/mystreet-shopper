@@ -7,10 +7,10 @@ type StatusCardProps = {
 
 export function StatusCard({ status }: StatusCardProps) {
   const items = [
-    { label: 'Application', value: status.application },
-    { label: 'Status', value: status.status },
-    { label: 'Framework', value: status.framework },
-    { label: 'UTC Timestamp', value: formatUtcTimestamp(status.utcTimestamp) },
+    { label: 'New drops', value: status.application },
+    { label: 'Shopping flow', value: status.status },
+    { label: 'Experience', value: status.framework },
+    { label: 'Updated', value: formatUtcTimestamp(status.utcTimestamp) },
   ]
 
   return (
@@ -18,12 +18,12 @@ export function StatusCard({ status }: StatusCardProps) {
       <div className="flex items-center justify-between gap-4 border-b border-stone-100 pb-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-700">
-            Backend health
+            Store highlights
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-stone-950">API status from GET /api/test</h2>
+          <h2 className="mt-2 text-xl font-semibold text-stone-950">Fresh reasons to shop now</h2>
         </div>
         <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-          Live
+          Featured
         </span>
       </div>
 

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" role="img" aria-label="Original sneaker illustration">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F8FAFC"/>
+    <stop offset="100%" stop-color="#E2E8F0"/>
+  </linearGradient>
+  <linearGradient id="upper" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#F8FAFC"/>
+    <stop offset="100%" stop-color="#E2E8F0"/>
+  </linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+    <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#0F172A" flood-opacity=".18"/>
+  </filter>
+</defs>
+<rect width="640" height="420" rx="28" fill="url(#bg)"/>
+<ellipse cx="315" cy="353" rx="230" ry="27" fill="#0F172A" opacity=".12"/>
+<g filter="url(#shadow)">
+  <path d="M112 250 C168 204 222 182 304 186 C360 188 394 212 438 244 C470 266 510 276 536 304 L548 336 L108 336 C76 336 58 322 58 300 C58 282 77 268 112 250 Z" fill="url(#upper)" stroke="#CBD5E1" stroke-width="5" stroke-linejoin="round"/>
+  
+  <path d="M86 320 C160 334 245 338 334 334 C420 330 492 318 548 300 L568 346 C500 365 414 376 318 378 C220 380 134 372 72 354 Z" fill="#111827" stroke="#CBD5E1" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M82 352 C172 364 274 366 376 360 C444 356 506 346 562 330 L570 352 C504 374 432 386 336 390 C228 394 132 386 68 370 Z" fill="#CBD5E1" opacity=".9"/>
+  <path d="M136 245 C188 212 232 198 280 198 C315 198 344 207 372 226" fill="none" stroke="#111827" stroke-width="11" stroke-linecap="round" opacity=".95"/>
+  <path d="M196 218 L224 282 M232 205 L258 282 M268 199 L294 280 M304 203 L330 278" stroke="#CBD5E1" stroke-width="7" stroke-linecap="round"/>
+  <path d="M176 262 C226 242 296 240 354 258" fill="none" stroke="#CBD5E1" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+  <path d="M378 235 C402 256 430 274 462 286" fill="none" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+  <path d="M118 304 C148 316 174 320 206 320" fill="none" stroke="#CBD5E1" stroke-width="6" stroke-linecap="round" opacity=".55"/>
+  <circle cx="478" cy="300" r="18" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="5"/>
+  <path d="M116 340 L142 356 M170 344 L196 360 M226 346 L252 362 M286 346 L312 362 M348 344 L374 360 M410 340 L436 356 M470 334 L496 348" stroke="#111827" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+</g>
+</svg>

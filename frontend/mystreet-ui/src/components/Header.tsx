@@ -11,16 +11,16 @@ export function Header() {
             </p>
             <div>
               <h1 className="text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl">
-                Local storefront control room
+                Sneakers for everyday rotation
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-stone-600 sm:text-base">
-                React routes, shared layout, and API wiring for the sneaker storefront.
+                Browse new drops, build a cart, and check out from a clean customer storefront.
               </p>
             </div>
           </div>
 
-          <div className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
-            Local API ready at /api/test
+          <div className="rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-800">
+            New arrivals weekly
           </div>
         </div>
 
