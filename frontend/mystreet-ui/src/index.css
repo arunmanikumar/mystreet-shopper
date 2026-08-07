@@ -28,3 +28,24 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* Improve primary/selected control contrast across the app. */
+.bg-stone-950 {
+  background-color: #b45309 !important;
+}
+
+.border-stone-950 {
+  border-color: #b45309 !important;
+}
+
+.hover\:bg-stone-800:hover {
+  background-color: #92400e !important;
+}
+
+.text-stone-50 {
+  color: #fffbeb !important;
+}
+
+.hover\:text-stone-950:hover {
+  color: #78350f !important;
+}

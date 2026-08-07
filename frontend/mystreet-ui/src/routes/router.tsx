@@ -1,14 +1,23 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { AppLayout } from '../layouts/AppLayout'
 import { AdminRoute } from './AdminRoute'
+import { CustomerRoute } from './CustomerRoute'
+import { CartPage } from '../pages/CartPage'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/LoginPage'
 import { ProductDetailsPage } from '../pages/ProductDetailsPage'
 import { ProductsPage } from '../pages/ProductsPage'
-import { PlaceholderPage } from '../pages/PlaceholderPage'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RegisterPage } from '../pages/RegisterPage'
 import { UnauthorizedPage } from '../pages/UnauthorizedPage'
+import { CheckoutPage } from '../pages/CheckoutPage'
+import { MyOrdersPage } from '../pages/MyOrdersPage'
+import { OrderDetailsPage } from '../pages/OrderDetailsPage'
+import { AdminProductsPage } from '../pages/AdminProductsPage'
+import { AdminProductCreatePage } from '../pages/AdminProductCreatePage'
+import { AdminProductEditPage } from '../pages/AdminProductEditPage'
+import { NotFoundPage } from '../pages/NotFoundPage'
+import { Navigate } from 'react-router-dom'
 
 export const appRouter = createBrowserRouter([
   {
@@ -16,10 +25,15 @@ export const appRouter = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        index: true,
         element: (
-          <HomePage />
+          <CustomerRoute />
         ),
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+        ],
       },
       {
         path: 'login',
@@ -31,57 +45,76 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: 'products',
-        element: <ProductsPage />,
-      },
-      {
-        path: 'products/:id',
-        element: <ProductDetailsPage />,
-      },
-      {
-        path: 'cart',
-        element: (
-          <PlaceholderPage
-            title="Cart"
-            description="Cart management will live here once product selection and quantity state are wired in."
-          />
-        ),
-      },
-      {
-        path: 'checkout',
-        element: (
-          <PlaceholderPage
-            title="Checkout"
-            description="Checkout forms and order submission will be added here in a later pass."
-          />
-        ),
-      },
-      {
-        path: 'orders',
-        element: <ProtectedRoute />,
+        element: <CustomerRoute />,
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Orders"
-                description="Order history and tracking screens will be added here once order APIs are available."
-              />
-            ),
+            element: <ProductsPage />,
+          },
+        ],
+      },
+      {
+        path: 'products/:id',
+        element: <CustomerRoute />,
+        children: [
+          {
+            index: true,
+            element: <ProductDetailsPage />,
+          },
+        ],
+      },
+      {
+        path: 'cart',
+        element: <CustomerRoute />,
+        children: [
+          {
+            index: true,
+            element: <CartPage />,
+          },
+        ],
+      },
+      {
+        path: 'checkout',
+        element: <CustomerRoute />,
+        children: [
+          {
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <CheckoutPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'orders',
+        element: <CustomerRoute />,
+        children: [
+          {
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <MyOrdersPage />,
+              },
+            ],
           },
         ],
       },
       {
         path: 'orders/:id',
-        element: <ProtectedRoute />,
+        element: <CustomerRoute />,
         children: [
           {
-            index: true,
-            element: (
-              <PlaceholderPage
-                title="Order Details"
-                description="This route will render the details for a single order when that feature is implemented."
-              />
-            ),
+            element: <ProtectedRoute />,
+            children: [
+              {
+                index: true,
+                element: <OrderDetailsPage />,
+              },
+            ],
           },
         ],
       },
@@ -91,12 +124,7 @@ export const appRouter = createBrowserRouter([
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Admin"
-                description="Administrative workflows will be grouped under this route."
-              />
-            ),
+            element: <Navigate to="/admin/products" replace />,
           },
         ],
       },
@@ -106,18 +134,25 @@ export const appRouter = createBrowserRouter([
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Admin Products"
-                description="Product management tools will be added here for administrative users."
-              />
-            ),
+            element: <AdminProductsPage />,
+          },
+          {
+            path: 'new',
+            element: <AdminProductCreatePage />,
+          },
+          {
+            path: ':id/edit',
+            element: <AdminProductEditPage />,
           },
         ],
       },
       {
         path: 'unauthorized',
         element: <UnauthorizedPage />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
       },
     ],
   },

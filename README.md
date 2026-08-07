@@ -1,42 +1,27 @@
 # MyStreet Shoppers
 
-A local ecommerce storefront for sneakers with a .NET backend API and React frontend.
+MyStreet Shoppers is a sneakers shopping experience focused on browsing, saving, and ordering products from a clean storefront.
 
-## Features
+## What customers can do
 
-- Browse a curated sneaker catalog
-- Add items to cart
-- Submit a local checkout order request
-- Localhost-only configuration with no analytics or remote logging
+- Browse featured sneakers and product collections
+- View product details, sizes, and availability
+- Add items to a cart and adjust quantities
+- Sign in to manage a personal shopping session
+- Place an order and review purchase history
 
-## Build and run
+## Customer experience
 
-### Backend
+The storefront is designed to keep the shopping flow simple:
 
-```powershell
-cd mystreet-shoppers\backend
-dotnet build
-```
+- Product discovery comes first
+- Cart and checkout stay lightweight
+- Account access is available when needed
+- The interface is optimized for local shopping demos and previews
 
-### Frontend
+## At a glance
 
-```powershell
-cd mystreet-shoppers\frontend\mystreet-ui
-npm install
-npm run build
-```
-
-### Run locally
-
-```powershell
-cd mystreet-shoppers\backend
-dotnet run
-```
-
-```powershell
-cd mystreet-shoppers\frontend\mystreet-ui
-npm install
-npm run dev
-```
-
-Open the frontend at `http://localhost:5173`.
+- Modern React storefront
+- Fast product browsing
+- Persistent cart experience
+- Order history for signed-in customers

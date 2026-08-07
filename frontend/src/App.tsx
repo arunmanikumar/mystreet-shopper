@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Catalog } from './components/Catalog';
-import { CartPanel } from './components/CartPanel';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { fetchSneakers, checkoutCart } from './api/sneakerApi';
-import type { CartItem, CheckoutRequest, Sneaker } from './types';
+import { AuthProvider } from './context/AuthContext';
+import { AppLayout } from './layouts/AppLayout';
+import { HomePage } from './pages/HomePage';
+import { LoginPage } from './pages/LoginPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { RegisterPage } from './pages/RegisterPage';
+import type { CartItem, Sneaker } from './types';
 
 function App() {
   const [sneakers, setSneakers] = useState<Sneaker[]>([]);
@@ -16,7 +21,7 @@ function App() {
 
   const total = useMemo(
     () => cart.reduce((sum, item) => sum + item.sneaker.price * item.quantity, 0),
-    [cart]
+    [cart],
   );
 
   const addToCart = (sneaker: Sneaker) => {
@@ -24,11 +29,10 @@ function App() {
       const existing = current.find((item) => item.sneaker.id === sneaker.id);
       if (existing) {
         return current.map((item) =>
-          item.sneaker.id === sneaker.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.sneaker.id === sneaker.id ? { ...item, quantity: item.quantity + 1 } : item,
         );
       }
+
       return [...current, { sneaker, quantity: 1 }];
     });
   };
@@ -36,10 +40,8 @@ function App() {
   const updateQuantity = (sneakerId: number, quantity: number) => {
     setCart((current) =>
       current
-        .map((item) =>
-          item.sneaker.id === sneakerId ? { ...item, quantity } : item
-        )
-        .filter((item) => item.quantity > 0)
+        .map((item) => (item.sneaker.id === sneakerId ? { ...item, quantity } : item))
+        .filter((item) => item.quantity > 0),
     );
   };
 
@@ -52,12 +54,8 @@ function App() {
     setIsSubmitting(true);
     setCheckoutMessage('');
 
-    const payload: CheckoutRequest = {
-      items: cart.map((item) => ({ sneakerId: item.sneaker.id, quantity: item.quantity })),
-    };
-
     try {
-      const result = await checkoutCart(payload);
+      const result = await checkoutCart(cart);
       setCart([]);
       setCheckoutMessage(`Order ${result.orderId} received. Total: $${result.total.toFixed(2)}`);
     } catch (error) {
@@ -68,27 +66,33 @@ function App() {
   };
 
   return (
-    <div className="app-shell">
-      <header className="app-header">
-        <div>
-          <p className="eyebrow">MyStreet Shoppers</p>
-          <h1>Find your next sneaker</h1>
-          <p>Browse the latest sneakers, add favorites to your cart, and checkout locally.</p>
-        </div>
-      </header>
-
-      <main>
-        <Catalog sneakers={sneakers} onAddToCart={addToCart} />
-        <CartPanel
-          cart={cart}
-          total={total}
-          isSubmitting={isSubmitting}
-          message={checkoutMessage}
-          onUpdateQuantity={updateQuantity}
-          onCheckout={handleCheckout}
-        />
-      </main>
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  sneakers={sneakers}
+                  cart={cart}
+                  total={total}
+                  isSubmitting={isSubmitting}
+                  checkoutMessage={checkoutMessage}
+                  onAddToCart={addToCart}
+                  onUpdateQuantity={updateQuantity}
+                  onCheckout={handleCheckout}
+                />
+              }
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/home" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

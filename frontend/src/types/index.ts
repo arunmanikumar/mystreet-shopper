@@ -1,10 +1,12 @@
 export type Sneaker = {
-  id: number;
+  id: string;
   name: string;
+  brand?: string;
   description: string;
   price: number;
   category: string;
   imageUrl: string;
+  sizes?: string[];
 };
 
 export type CartItem = {
@@ -13,7 +15,7 @@ export type CartItem = {
 };
 
 export type CheckoutRequest = {
-  items: Array<{ sneakerId: number; quantity: number }>;
+  items: CartItem[];
 };
 
 export type OrderResponse = {

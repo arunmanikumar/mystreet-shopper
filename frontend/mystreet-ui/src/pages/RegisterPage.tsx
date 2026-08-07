@@ -30,11 +30,11 @@ type RedirectState = {
 export function RegisterPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { isAuthenticated, register: registerUser } = useAuth()
+  const { isAdmin, isAuthenticated, register: registerUser } = useAuth()
   const [apiError, setApiError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const redirectTo = (location.state as RedirectState | null)?.from ?? '/'
+  const redirectTo = (location.state as RedirectState | null)?.from ?? (isAdmin ? '/admin/products' : '/')
 
   const {
     register,
@@ -52,7 +52,7 @@ export function RegisterPage() {
   })
 
   if (isAuthenticated) {
-    return <Navigate to={redirectTo} replace />
+    return <Navigate to={isAdmin ? '/admin/products' : redirectTo} replace />
   }
 
   const onSubmit = handleSubmit(async (values) => {
@@ -60,13 +60,13 @@ export function RegisterPage() {
     setIsSubmitting(true)
 
     try {
-      await registerUser({
+      const response = await registerUser({
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
         password: values.password,
       })
-      navigate(redirectTo, { replace: true })
+      navigate(response.user.isAdmin ? '/admin/products' : redirectTo, { replace: true })
     } catch (error) {
       setApiError(error instanceof Error ? error.message : 'Registration failed.')
     } finally {
@@ -83,7 +83,7 @@ export function RegisterPage() {
             Create your MyStreet account
           </h2>
           <p className="mt-3 text-sm leading-7 text-stone-600 sm:text-base">
-            Registration signs the user in immediately after the backend accepts the request.
+            Create an account so checkout stays quick and your order history stays close at hand.
           </p>
         </div>
 
@@ -144,7 +144,7 @@ export function RegisterPage() {
           </label>
 
           {apiError ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 sm:col-span-2">
+            <div role="alert" aria-live="assertive" className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 sm:col-span-2">
               {apiError}
             </div>
           ) : null}
@@ -169,11 +169,11 @@ export function RegisterPage() {
       <section className="rounded-[2rem] border border-stone-200 bg-stone-100 p-8 shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-700">Account setup</p>
         <h3 className="mt-4 text-3xl font-semibold tracking-tight text-stone-950 sm:text-4xl">
-          Start with a local account and continue directly into the app.
+          Start with a local account and continue directly into the store.
         </h3>
         <p className="mt-4 max-w-lg text-sm leading-7 text-stone-700 sm:text-base">
-          The form validates required fields, enforces password confirmation, and signs the user in
-          immediately after a successful registration response.
+          The form validates required fields, enforces password confirmation, and moves you back into
+          shopping after signup.
         </p>
       </section>
     </div>

@@ -1,25 +1,27 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
-const baseLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/products', label: 'Products' },
-  { to: '/cart', label: 'Cart' },
-]
-
 export function Navigation() {
   const navigate = useNavigate()
   const { isAdmin, isAuthenticated, logout, user } = useAuth()
 
-  const links = [
-    ...baseLinks,
-    ...(isAuthenticated ? [{ to: '/orders', label: 'Orders' }] : []),
-    ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []),
-    ...(!isAuthenticated ? [
-      { to: '/login', label: 'Login' },
-      { to: '/register', label: 'Register' },
-    ] : []),
-  ]
+  const links = isAdmin
+    ? [
+        { to: '/admin/products', label: 'Inventory' },
+        { to: '/admin/products/new', label: 'Add item' },
+      ]
+    : [
+        { to: '/', label: 'Home' },
+        { to: '/products', label: 'Products' },
+        { to: '/cart', label: 'Cart' },
+        ...(isAuthenticated ? [{ to: '/orders', label: 'Orders' }] : []),
+        ...(!isAuthenticated
+          ? [
+              { to: '/login', label: 'Login' },
+              { to: '/register', label: 'Register' },
+            ]
+          : []),
+      ]
 
   const handleLogout = async () => {
     await logout()

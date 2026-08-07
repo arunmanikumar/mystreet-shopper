@@ -15,7 +15,13 @@ export function Catalog({ sneakers, onAddToCart }: CatalogProps) {
       <div className="grid">
         {sneakers.map((sneaker) => (
           <article key={sneaker.id} className="card">
-            <img src={sneaker.imageUrl || placeholderImage} alt={sneaker.name} />
+            <img
+              src={sneaker.imageUrl || placeholderImage}
+              alt={sneaker.name}
+              onError={(event) => {
+                event.currentTarget.src = placeholderImage;
+              }}
+            />
             <div className="card-body">
               <p className="category">{sneaker.category}</p>
               <h3>{sneaker.name}</h3>

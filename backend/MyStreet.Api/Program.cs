@@ -22,7 +22,22 @@ var jwtIssuer = jwtSection.GetValue<string>("Issuer");
 var jwtAudience = jwtSection.GetValue<string>("Audience");
 var jwtSigningKey = jwtSection.GetValue<string>("SigningKey");
 
-var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey ?? string.Empty));
+if (string.IsNullOrWhiteSpace(jwtIssuer))
+{
+    throw new InvalidOperationException("JWT issuer must be configured.");
+}
+
+if (string.IsNullOrWhiteSpace(jwtAudience))
+{
+    throw new InvalidOperationException("JWT audience must be configured.");
+}
+
+if (string.IsNullOrWhiteSpace(jwtSigningKey) || jwtSigningKey.Length < 32)
+{
+    throw new InvalidOperationException("JWT signing key must be configured and at least 32 characters long.");
+}
+
+var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -93,8 +108,10 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
@@ -105,6 +122,12 @@ app.UseCors("AllowLocalhost5173");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();
+// Ensure plain /swagger redirects to the UI index so browsers show the interactive docs
+app.MapGet("/swagger", (Microsoft.AspNetCore.Http.HttpContext ctx) =>
+{
+    ctx.Response.Redirect("/swagger/index.html", permanent: false);
+    return System.Threading.Tasks.Task.CompletedTask;
+});
 app.UseSwaggerUI();
 
 app.MapGet("/", () => Results.Json(new

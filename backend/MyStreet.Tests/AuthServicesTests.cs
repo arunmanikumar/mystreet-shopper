@@ -37,7 +37,7 @@ public class AuthServicesTests
         jwt.Claims.Should().Contain(c => c.Type == JwtRegisteredClaimNames.Email && c.Value == user.Email);
         jwt.Claims.Should().Contain(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier" && c.Value == user.Id.ToString());
         jwt.Claims.Should().Contain(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" && c.Value == "Ada Lovelace");
-        jwt.Claims.Should().Contain(c => c.Type == "isAdmin" && c.Value == "True");
+        jwt.Claims.Should().Contain(c => c.Type == "isAdmin" && c.Value == "true");
     }
 
     [Fact]

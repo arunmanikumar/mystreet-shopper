@@ -16,19 +16,14 @@ type RedirectState = {
   from?: string
 }
 
-const helperCredentials = [
-  'user@mystreet.com / User@123',
-  'admin@mystreet.com / Admin@123',
-]
-
 export function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { isAuthenticated, login } = useAuth()
+  const { isAdmin, isAuthenticated, login } = useAuth()
   const [apiError, setApiError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const redirectTo = (location.state as RedirectState | null)?.from ?? '/'
+  const redirectTo = (location.state as RedirectState | null)?.from ?? (isAdmin ? '/admin/products' : '/')
 
   const {
     register,
@@ -43,7 +38,7 @@ export function LoginPage() {
   })
 
   if (isAuthenticated) {
-    return <Navigate to={redirectTo} replace />
+    return <Navigate to={isAdmin ? '/admin/products' : redirectTo} replace />
   }
 
   const onSubmit = handleSubmit(async (values) => {
@@ -51,8 +46,8 @@ export function LoginPage() {
     setIsSubmitting(true)
 
     try {
-      await login(values)
-      navigate(redirectTo, { replace: true })
+      const response = await login(values)
+      navigate(response.user.isAdmin ? '/admin/products' : redirectTo, { replace: true })
     } catch (error) {
       setApiError(error instanceof Error ? error.message : 'Login failed.')
     } finally {
@@ -68,21 +63,9 @@ export function LoginPage() {
           Sign in to continue your storefront session.
         </h2>
         <p className="mt-4 max-w-lg text-sm leading-7 text-stone-300 sm:text-base">
-          Use your account to access orders, checkout workflows, and admin tools when applicable.
+          Use your account to keep track of orders, speed through checkout, and return to your saved
+          picks.
         </p>
-
-        {import.meta.env.DEV ? (
-          <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">
-              Development helper
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-stone-200">
-              {helperCredentials.map((credential) => (
-                <li key={credential}>{credential}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
       </section>
 
       <section className="rounded-[2rem] border border-stone-200 bg-white/95 p-6 shadow-sm sm:p-8">
@@ -115,7 +98,7 @@ export function LoginPage() {
           </label>
 
           {apiError ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+            <div role="alert" aria-live="assertive" className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
               {apiError}
             </div>
           ) : null}
