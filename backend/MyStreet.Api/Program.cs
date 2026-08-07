@@ -122,6 +122,12 @@ app.UseCors("AllowLocalhost5173");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwagger();
+// Ensure plain /swagger redirects to the UI index so browsers show the interactive docs
+app.MapGet("/swagger", (Microsoft.AspNetCore.Http.HttpContext ctx) =>
+{
+    ctx.Response.Redirect("/swagger/index.html", permanent: false);
+    return System.Threading.Tasks.Task.CompletedTask;
+});
 app.UseSwaggerUI();
 
 app.MapGet("/", () => Results.Json(new
